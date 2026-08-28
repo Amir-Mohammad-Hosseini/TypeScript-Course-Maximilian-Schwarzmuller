@@ -1,7 +1,7 @@
 // Getters and Setters
 
 class UserDatas {
-    private _firstName : string  = ""
+    protected _firstName : string  = ""
      private _lastName : string = ""
 
      set firstName (name : string){
@@ -49,6 +49,6 @@ class Employee extends UserDatas {
     }
 
     work (){
-        //...
+        console.log(this._firstName)
     }
 }
