@@ -15,12 +15,17 @@ console.log(amirUser);
 class Product {
     title;
     price;
+    colors = [];
     constructor(title, price) {
         this.title = title;
         this.price = price;
     }
+    showTitle() {
+        console.log(this.title);
+    }
 }
 const samsungS20Ultra = new Product("Samsung Galaxy S20 Ultra", 20_000_000);
 const iphone14ProMax = new Product("IPhone 14 Pro Max", 120_000_000);
+samsungS20Ultra.price = 67_000_000;
 console.log(samsungS20Ultra, iphone14ProMax);
 //# sourceMappingURL=basics.js.map

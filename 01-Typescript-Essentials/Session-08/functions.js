@@ -1,5 +1,6 @@
 "use strict";
 // Function return type . In the following example , add function returns a number
+Object.defineProperty(exports, "__esModule", { value: true });
 function addNumbers(a, b) {
     return a + b;
 }
@@ -35,3 +36,4 @@ let user = {
 console.log(user);
 const userGreet = user.greet();
 console.log(userGreet);
+//# sourceMappingURL=functions.js.map

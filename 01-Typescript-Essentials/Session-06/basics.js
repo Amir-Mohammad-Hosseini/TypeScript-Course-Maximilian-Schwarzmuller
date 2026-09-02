@@ -1,5 +1,6 @@
 "use strict";
 // Object
+Object.defineProperty(exports, "__esModule", { value: true });
 let userDatas = {
     name: "Amir",
     age: 21,
@@ -23,3 +24,4 @@ cartDatas = {
     itemsName: "Cart Items..."
 };
 console.log(cartDatas);
+//# sourceMappingURL=basics.js.map

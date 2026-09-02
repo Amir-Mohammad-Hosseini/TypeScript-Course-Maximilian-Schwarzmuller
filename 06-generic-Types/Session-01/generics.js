@@ -17,4 +17,12 @@ function mergeObj(a, b) {
 }
 const merged = mergeObj({ userName: "Amir" }, { age: 21 });
 console.log(merged);
+// Generic classes
+class User {
+    id;
+    constructor(id) {
+        this.id = id;
+    }
+}
+const user = new User("u1");
 //# sourceMappingURL=generics.js.map
