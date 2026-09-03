@@ -1,0 +1,21 @@
+// Template literal types
+
+const username = "Amir";
+
+const greeting = `Hi there, ${username}.`;
+
+type ReadPermissions = "no-read" | "read";
+type WritePermissions = "no-write" | "write";
+
+type FilePermissions = `${ReadPermissions}-${WritePermissions}`
+
+type DataFile = {
+    data : string,
+    permissions : FilePermissions
+}
+
+type DataFileEventNames = `${keyof DataFile}Changed`
+
+type DataFileEvents = {
+    [Key in DataFileEventNames] : () => void
+}
