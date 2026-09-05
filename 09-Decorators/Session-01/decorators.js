@@ -1,6 +1,13 @@
 "use strict";
 // Decorators : Decorators are things you have written that can be attached to our code to manipulate how that code works.
 // TS supports 2 kinds of decorators : ECMAScript and Experimental
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -28,13 +35,6 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
 };
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 function logger(target, ctx) {
     console.log("logger decorator");
@@ -48,27 +48,60 @@ function logger(target, ctx) {
         }
     };
 }
+function autobind(target, ctx) {
+    ctx.addInitializer(function () {
+        this[ctx.name] = this[ctx.name].bind(this);
+    });
+    return function () {
+        console.log("Executing original function");
+        target.apply(this);
+    };
+}
+function replacer(initValue) {
+    return function replacerDecorator(target, ctx) {
+        console.log(target);
+        console.log(ctx);
+        return (initialValue) => {
+            console.log(initialValue);
+            return initValue;
+        };
+    };
+}
 let Person = (() => {
     let _classDecorators = [logger];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
+    let _instanceExtraInitializers = [];
+    let _name_decorators;
+    let _name_initializers = [];
+    let _name_extraInitializers = [];
+    let _greet_decorators;
     var Person = class {
         static { _classThis = this; }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            _name_decorators = [replacer("")];
+            _greet_decorators = [autobind];
+            __esDecorate(this, null, _greet_decorators, { kind: "method", name: "greet", static: false, private: false, access: { has: obj => "greet" in obj, get: obj => obj.greet }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(null, null, _name_decorators, { kind: "field", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             Person = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
-        name = "Amir";
+        name = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _name_initializers, "Amir"));
         greet() {
             console.log("Hi, I am " + this.name);
+        }
+        constructor() {
+            __runInitializers(this, _name_extraInitializers);
         }
     };
     return Person = _classThis;
 })();
 const amir = new Person();
 const ava = new Person();
+const greet = amir.greet;
+greet();
 //# sourceMappingURL=decorators.js.map
