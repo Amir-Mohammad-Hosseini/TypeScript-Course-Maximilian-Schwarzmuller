@@ -96,18 +96,18 @@ class Product {
 const p1 = new Product("Book", 18);
 const p2 = new Product("Book 2", 19);
 
-function Autobind (_ : any , _2 : string , descriptor : PropertyDescriptor) {
-  const originalMethod =descriptor.value
-  const adjDescriptor : PropertyDescriptor = {
-    configurable : true ,
-    enumerable : false , 
-    get () {
-      const bindFn = originalMethod.bind(this)
-    }
-  }
+function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const bindFn = originalMethod.bind(this);
+      return bindFn;
+    },
+  };
 
-  return adjDescriptor
-
+  return adjDescriptor;
 }
 
 class Printer {
@@ -119,7 +119,82 @@ class Printer {
   }
 }
 
-const p = new Printer()
+const p = new Printer();
 
-const button = document.querySelector("button")
-button?.addEventListener("click" , p.showMessage)
+const button = document.querySelector("button");
+button?.addEventListener("click", p.showMessage);
+
+interface ValidatorConfig {
+  [property: string]: {
+    [validatableProp: string]: string[]; // ["required" , "positive"]
+  };
+}
+
+const registeredValidators: ValidatorConfig = {};
+
+function RequiredFn(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ["required"],
+  };
+}
+
+function PositiveNumberFn(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ["positive"],
+  };
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+
+  let isValid = true;
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case "required":
+          isValid = isValid && !!obj[prop];
+          break;
+        case "positive":
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+  return isValid;
+}
+
+class Course {
+  @RequiredFn
+  title: string;
+  @PositiveNumberFn
+  price: number;
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this.price = p;
+  }
+}
+
+const courseForm = document.querySelector("form")!;
+console.log(courseForm);
+
+courseForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const titleEl = courseForm.querySelector("#title") as HTMLInputElement;
+  const priceEl = courseForm.querySelector("#price") as HTMLInputElement;
+
+  const title = titleEl.value;
+  const price = +priceEl.value;
+
+  const createdCourse = new Course(title, price);
+
+  if (!validate(createdCourse)) {
+    alert("Invalid input");
+  }
+  console.log(createdCourse);
+});
