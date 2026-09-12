@@ -1,6 +1,9 @@
 // Project  Type
 
-enum ProjectStatus {Active , Finished}
+enum ProjectStatus {
+  Active,
+  Finished,
+}
 
 class Project {
   constructor(
@@ -13,7 +16,7 @@ class Project {
 }
 
 // Project state management class
-type Listener = (items : Project[]) => void
+type Listener = (items: Project[]) => void;
 class ProjectState {
   private listeners: Listener[] = [];
   private projects: Project[] = [];
@@ -35,12 +38,12 @@ class ProjectState {
 
   addProject(title: string, description: string, numOfPeople: number) {
     const newProject = new Project(
-     crypto.randomUUID(),
+      crypto.randomUUID(),
       title,
       description,
-       numOfPeople,
-       ProjectStatus.Active
-    )
+      numOfPeople,
+      ProjectStatus.Active,
+    );
 
     this.projects.push(newProject);
     for (const listenerFn of this.listeners) {
@@ -136,7 +139,12 @@ class ProjectList {
     this.element.id = `${type}-projects`;
 
     projectSate.addListener((projects: Project[]) => {
-      this.assignedProjects = projects;
+      const relevantProjects = projects.filter((project) =>
+        this.type === "active"
+          ? project.status === ProjectStatus.Active
+          : project.status === ProjectStatus.Finished,
+      );
+      this.assignedProjects = relevantProjects;
       this.renderProjects();
     });
 
