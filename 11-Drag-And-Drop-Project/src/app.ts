@@ -21,7 +21,6 @@ type Listener<T> = (items: T[]) => void;
 class State<T> {
   protected listeners: Listener<T>[] = [];
 
-
   addListener(listenerFn: Listener<T>) {
     this.listeners.push(listenerFn);
   }
@@ -32,7 +31,7 @@ class ProjectState extends State<Project> {
   private static instance: ProjectState;
 
   private constructor() {
-    super()
+    super();
   }
 
   static getInstance() {
@@ -42,7 +41,6 @@ class ProjectState extends State<Project> {
     this.instance = new ProjectState();
     return this.instance;
   }
-
 
   addProject(title: string, description: string, numOfPeople: number) {
     const newProject = new Project(
@@ -178,7 +176,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     this.renderContent();
   }
 
-    configure() {
+  configure() {
     projectSate.addListener((projects: Project[]) => {
       const relevantProjects = projects.filter((project) =>
         this.type === "active"
@@ -203,32 +201,38 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     )! as HTMLUListElement;
     listEl.innerHTML = "";
     for (const prjItem of this.assignedProjects) {
-      new ProjectItem(this.element.querySelector("ul")!.id ,prjItem)
+      new ProjectItem(this.element.querySelector("ul")!.id, prjItem);
     }
   }
-  
 }
 
 // ProjectItem class
-class ProjectItem extends Component<HTMLUListElement , HTMLLIElement> {
-  private project :Project
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private project: Project;
 
-  constructor(hostId : string , project:Project){
-    super("single-project",hostId,false ,project.id)
-    this.project = project
-
-    this.configure()
-    this.renderContent()
+  get persons () {
+    if(this.project.people === 1){
+      return "1 person"
+    }else {
+      return `${this.project.people} persons`
+    }
   }
 
-  configure() {
-    
+  constructor(hostId: string, project: Project) {
+    super("single-project", hostId, false, project.id);
+    this.project = project;
+
+    this.configure();
+    this.renderContent();
   }
+
+  configure() {}
 
   renderContent() {
-    this.element.querySelector("h2")!.textContent =this.project.title
-    this.element.querySelector("h3")!.textContent =this.project.people.toString()
-    this.element.querySelector("p")!.textContent =this.project.description
+    this.element.querySelector("h2")!.textContent = this.project.title;
+    this.element.querySelector("h3")!.textContent =
+      this.persons + " assigned.";
+    this.element.querySelector("p")!.textContent = this.project.description;
   }
 }
 
@@ -241,7 +245,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   constructor() {
     super("project-input", "app", true, "user-input");
 
-        this.titleInputElement = this.element.querySelector(
+    this.titleInputElement = this.element.querySelector(
       "#title",
     ) as HTMLInputElement;
     this.descriptionInputElement = this.element.querySelector(
@@ -254,13 +258,11 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     this.configure();
   }
 
-    configure() {
+  configure() {
     this.element.addEventListener("submit", this.handleSubmit);
   }
 
-  renderContent() {
-    
-  }
+  renderContent() {}
 
   private gatherUserInput(): [string, string, number] | void {
     const enteredTitle = this.titleInputElement.value;
@@ -279,7 +281,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     const peopleValidatable: Validatable = {
       value: +enteredPeople,
       required: true,
-      min: 1,
+      min: 0,
     };
 
     if (
@@ -311,7 +313,6 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
       this.clearInputs();
     }
   }
-
 }
 
 const projectInput = new ProjectInput();
