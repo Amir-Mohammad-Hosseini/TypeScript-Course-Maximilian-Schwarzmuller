@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "amd",
+    "module": "es2015",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+
     "lib": [
       "dom",
       "es6",
       "dom.iterable",
       "scripthost"
     ],
+
     "sourceMap": true,
-    "outFile": "./dist/app.js",
     "removeComments": true,
     "noEmitOnError": true,
 
@@ -23,6 +27,7 @@
 
     "types": []
   },
+
   "exclude": [
     "node_modules"
   ]
