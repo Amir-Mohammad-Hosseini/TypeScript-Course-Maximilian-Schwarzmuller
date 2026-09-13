@@ -1,6 +1,6 @@
-import { Component } from "./base-component.js";
+import  Component  from "./base-component.js";
 import { Validatable , validate } from "../util/validation.js";
-import { autobind } from "../decorators/autobind.js";
+import { autobind as Autobind } from "../decorators/autobind.js";
 import { projectSate } from "../state/project-state.js";
 
 // ProjectInput Class
@@ -69,7 +69,7 @@ import { projectSate } from "../state/project-state.js";
       this.peopleInputElement.value = "";
     }
 
-    @autobind
+    @Autobind
     private handleSubmit(event: Event) {
       event.preventDefault();
 
