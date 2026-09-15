@@ -1,10 +1,14 @@
-import React from 'react'
+import Header from "./components/Header"
+import goalsImg from "./assets/goals.jpg"
+
 
 const App = () => {
   return (
-    <>
-     <h1>Hello World!</h1> 
-    </>
+    <main>
+      <Header image={{src : goalsImg , alt : "A list of goals"}}>
+        <h1>Your Course Goals</h1>
+      </Header>
+    </main>
   )
 }
 
